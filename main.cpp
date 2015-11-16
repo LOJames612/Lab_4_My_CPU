@@ -11,31 +11,47 @@ string filename_prompt();
 map <string, int> translation;
 map <string, int> ::iterator valid_entry;
 void create_translation();
-void display_menu
+void display_menu();
 void execute_instructions(int opcode);
 
 
-int ACC, PC, opcode, operand;
+int ACC, PC, opcode, operand, result;
 vector<int> RAM;
 
 int main()
 {
-    string filename, entry;
+    string filename, entry, convert;
+
 
     filename = filename_prompt();
-    ifstream(filename.c_str());
+    ifstream myfile(filename.c_str());
+
+    create_translation();
+    //execute_instructions();
 
 
-    if(.is_open()){
-        while (filename >> entry && !filename.eof()){
-            cout << entry << endl;
+    if(myfile.is_open()){
+        while (myfile >> entry && !myfile.eof()){
+            //cout << entry <<endl;
+            valid_entry = translation.find(entry);
+            if (valid_entry == translation.end()){
+                istringstream(entry) >> result;
+                RAM.push_back(result);
+                }
+            else
+                RAM.push_back(valid_entry->second);
+        }
+        for (int i=0; i<RAM.size(); i++){
+        cout << RAM[i] <<endl;
         }
     }
+
+
     else{
         cout << "Error in opening your file, try again." << endl;
         filename_prompt();
     }
-    filename.close();
+    myfile.close();
 
     return 0;
 }
@@ -101,18 +117,29 @@ void execute_instructions(int opcode){
             PC++;
             break;
         case 7:
-            operand = RAM[++pc];
-            pc = operand;
+            operand = RAM[++PC];
+            PC = operand;
             break;
         case 8:
-            operand = RAM[++pc];
-            if ( acc != 0 )
-                pc = operand;
+            operand = RAM[++PC];
+            if ( ACC != 0 )
+                PC = operand;
             else
-                pc++;
+                PC++;
             break;
-        case 8:
+        case 9:
             cout << "Program halted" << endl;
             break;
     }
+}
+
+void display_menu(){
+    cout << "Enter CLR to clear last calculated value" << endl;
+    cout << "Enter LOAD to load an operand to the accumulator." << endl;
+    cout << "Enter ADD to add operand to last calculated value." << endl;
+    cout << "Enter SUB to subtract operand from last calculated value." << endl;
+    cout << "Enter MUL to multiply last calculated value by an operand." << endl;
+    cout << "Enter DIV to divide last calculated value by an operand." << endl;
+    cout << "Enter OUT to display last calculated value." << endl;
+    cout << "Enter HALT to halt program." << endl;
 }
