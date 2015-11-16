@@ -15,24 +15,20 @@ void display_menu();
 void execute_instructions(int opcode);
 
 
-int ACC, PC, opcode, operand, result;
+int ACC, PC=0, opcode, operand, result;
 vector<int> RAM;
 
 int main()
 {
-    string filename, entry, convert;
-
+    string filename, entry;
 
     filename = filename_prompt();
     ifstream myfile(filename.c_str());
 
     create_translation();
-    //execute_instructions();
-
 
     if(myfile.is_open()){
         while (myfile >> entry && !myfile.eof()){
-            //cout << entry <<endl;
             valid_entry = translation.find(entry);
             if (valid_entry == translation.end()){
                 istringstream(entry) >> result;
@@ -41,16 +37,20 @@ int main()
             else
                 RAM.push_back(valid_entry->second);
         }
-        for (int i=0; i<RAM.size(); i++){
+        /*for (int i=0; i<RAM.size(); i++){
         cout << RAM[i] <<endl;
+        }*/
+        for(;;){     // forever
+            // FETCH CYCLE
+            opcode = RAM[PC];
+            execute_instructions(opcode);
         }
     }
-
-
     else{
         cout << "Error in opening your file, try again." << endl;
         filename_prompt();
     }
+
     myfile.close();
 
     return 0;
