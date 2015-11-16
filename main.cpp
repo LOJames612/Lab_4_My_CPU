@@ -22,7 +22,7 @@ vector<int> RAM;
 
 int main()
 {
-    string filename, entry, user_added_instruct;
+    string filename, entry, user_added_opcode;
     char more_instruct_response;
     int new_operand;
 
@@ -45,8 +45,8 @@ int main()
         cout << RAM[i] <<endl;
         }*/
         cout << RAM.size() <<endl;
-        for(int i=0; i<RAM.size(); i++){     // forever
-            // FETCH CYCLE
+        for(int i=0; i<RAM.size(); i++){
+            // Fetch cycle
             opcode = RAM[PC];
             execute_instructions(opcode);
         }
@@ -54,9 +54,14 @@ int main()
         more_instruct_response = additional_instructions();
         if (more_instruct_response =='Y' || more_instruct_response =='y'){
                 display_menu();
-                cin >> user_added_instruct >> new_operand;
-                valid_entry = translation.find(user_added_instruct);
-                {if (valid_entry == translation.end()){
+                cin >> user_added_opcode;
+                valid_entry = translation.find(user_added_opcode);
+                {if (valid_entry->first == "CLR" || valid_entry->first == "OUT" || valid_entry->first == "HALT")
+                    cout << "OK then..." <<endl;
+                else
+                    cout << "Nevermind  then..." << endl;
+        }
+                /*{if (valid_entry == translation.end()){
                     //istringstream(entry) >> result;
                     //RAM.push_back(100);
                     cout << "ERROR" << endl;
@@ -64,7 +69,7 @@ int main()
                 else
                     RAM.push_back(valid_entry->second);
                 }
-        RAM.push_back(new_operand);
+        RAM.push_back(new_operand);*/
 
         /*for (int i=0; i<RAM.size(); i++){
         cout << RAM[i] <<endl;
@@ -173,6 +178,7 @@ void execute_instructions(int opcode){
 }
 
 void display_menu(){
+    cout << "Step 1: Select an operation to perform: " <<endl;
     cout << "Enter CLR to clear last calculated value, OR" << endl;
     cout << "Enter LOAD to load an operand to the accumulator, OR" << endl;
     cout << "Enter ADD to add operand to last calculated value, OR" << endl;
@@ -181,8 +187,8 @@ void display_menu(){
     cout << "Enter DIV to divide last calculated value by an operand, OR" << endl;
     cout << "Enter OUT to display last calculated value, OR" << endl;
     cout << "Enter HALT to halt program." << endl;
-    cout << endl;
-    cout << "Then enter the operand: " <<endl;
+    //cout << endl;
+    //cout << "Then enter the operand: " <<endl;
 }
 
 char additional_instructions (){
