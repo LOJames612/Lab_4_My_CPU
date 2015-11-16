@@ -58,22 +58,24 @@ int main()
                 valid_entry = translation.find(user_added_instruct);
                 {if (valid_entry == translation.end()){
                     //istringstream(entry) >> result;
-                    RAM.push_back(new_operand);
                     //RAM.push_back(100);
+                    cout << "ERROR" << endl;
                     }
                 else
                     RAM.push_back(valid_entry->second);
-                    //RAM.push_back(1001);
                 }
-        cout << RAM.size() <<endl;
-        for (int i=0; i<RAM.size(); i++){
+        RAM.push_back(new_operand);
+
+        /*for (int i=0; i<RAM.size(); i++){
         cout << RAM[i] <<endl;
-        }
-        /*for(int i=0; i<RAM.size(); i++){     // forever
+        }*/
+        for(int i=0; i<RAM.size(); i++){     // forever
             // FETCH CYCLE
             opcode = RAM[PC];
             execute_instructions(opcode);
-        }*/
+            cout << ACC << endl;
+        }
+
                 }
         else{
             cout << "Exiting program." << endl;
