@@ -31,8 +31,18 @@ int main()
 
     create_translation();
 
+
+    while  (myfile.fail()){
+        //while (myfile.fail()){
+            cout << "Error in opening your file, try again." << endl;
+            filename = filename_prompt();
+            ifstream myfile(filename.c_str());
+
+
     if (myfile.is_open()){
-        while (myfile >> entry && !myfile.eof()){
+        //while (myfile >> entry && !myfile.eof()){
+        do {
+            (myfile >> entry && !myfile.eof());//{
             valid_entry = translation.find(entry);
             if (valid_entry == translation.end()){
                 istringstream(entry) >> result;
@@ -40,11 +50,14 @@ int main()
                 }
             else
                 RAM.push_back(valid_entry->second);
-        }
-        /*for (int i=0; i<RAM.size(); i++){
-        cout << RAM[i] <<endl;
-        }*/
+        } while (entry != "HALT");
         cout << RAM.size() <<endl;
+        //cout <<endl;
+
+        //for (int i=0; i<RAM.size(); i++){
+        //cout << RAM[i] <<endl;
+        //}
+
         for(int i=0; i<RAM.size(); i++){
             // Fetch cycle
             opcode = RAM[PC];
@@ -54,46 +67,37 @@ int main()
         more_instruct_response = additional_instructions();
         if (more_instruct_response =='Y' || more_instruct_response =='y'){
                 display_menu();
+                do {
                 cin >> user_added_opcode;
                 valid_entry = translation.find(user_added_opcode);
-                {if (valid_entry->first == "CLR" || valid_entry->first == "OUT" || valid_entry->first == "HALT")
+                {if (valid_entry->first == "CLR" || valid_entry->first == "OUT" /*|| valid_entry->first == "HALT"*/){
                     cout << "OK then..." <<endl;
-                else
-                    cout << "Nevermind  then..." << endl;
-        }
-                /*{if (valid_entry == translation.end()){
-                    //istringstream(entry) >> result;
-                    //RAM.push_back(100);
-                    cout << "ERROR" << endl;
-                    }
-                else
                     RAM.push_back(valid_entry->second);
+                    }
+                else{
+                    //cout << "Nevermind  then..." << endl;
+                    cout << "Enter the operand: " <<endl;
+                    cin >> new_operand;
+                    RAM.push_back(new_operand);
+                    }
                 }
-        RAM.push_back(new_operand);*/
+                }while (user_added_opcode != "HALT");
 
-        /*for (int i=0; i<RAM.size(); i++){
-        cout << RAM[i] <<endl;
-        }*/
-        for(int i=0; i<RAM.size(); i++){     // forever
+        //for (int i=0; i<RAM.size(); i++){
+        //cout << RAM[i] <<endl;
+        //}
+        for(int i=0; i<RAM.size(); i++){
             // FETCH CYCLE
             opcode = RAM[PC];
             execute_instructions(opcode);
-            cout << ACC << endl;
         }
-
-                }
+        }
         else{
-            cout << "Exiting program." << endl;
+            cout << "Exiting current program..." << endl;
+            cout << "Returning to main menu..." <<endl;     //GO BACK TO MAIN MENU!
             exit (EXIT_SUCCESS);
         }
         }
-
-
-    else {
-        //while (myfile.fail()){
-            cout << "Error in opening your file, try again." << endl;
-            //filename_prompt();
-        //}
     }
 
     myfile.close();
