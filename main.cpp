@@ -61,12 +61,13 @@ int main()
 
 
         more_instruct_response = additional_instructions();
-        if (more_instruct_response =='Y' || more_instruct_response =='y'){
+        //if (more_instruct_response =='Y' || more_instruct_response =='y'){
+        while (more_instruct_response =='Y' || more_instruct_response =='y'){
                 display_menu();
-                do {
-                cin >> user_added_opcode;
+                //do {
+                cin >> user_added_opcode;   //MAKE USER INPUT UPPER CASE!
                 valid_entry = translation.find(user_added_opcode);
-                if (valid_entry->first == "CLR" || valid_entry->first == "OUT"){ //valid_entry->first == "HALT"){
+                if (valid_entry->first == "CLR" || valid_entry->first == "OUT"){
                     cout << "OK then..." <<endl;
                     RAM.push_back(valid_entry->second);
                     }
@@ -77,7 +78,7 @@ int main()
                     cin >> new_operand;
                     RAM.push_back(new_operand);
                     }
-                }while (user_added_opcode != "HALT");
+                //}while (user_added_opcode != "HALT");
                 //}
 
         //for (int i=0; i<RAM.size(); i++){
@@ -88,8 +89,10 @@ int main()
             opcode = RAM[PC];
             execute_instructions(opcode);
         }
+        more_instruct_response = additional_instructions();
         }
-        else{
+        //else{
+        if (more_instruct_response !='Y' || more_instruct_response !='y'){
             cout << "Exiting current program..." << endl;
             cout << "Returning to main menu..." <<endl;     //GO BACK TO MAIN MENU!
             exit (EXIT_SUCCESS);
