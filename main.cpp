@@ -69,7 +69,7 @@ int main()
                 //do {
                 cin >> user_added_opcode;   //MAKE USER INPUT UPPER CASE!
                 valid_entry = translation.find(user_added_opcode);
-                if (valid_entry->first == "CLR" || valid_entry->first == "OUT"){
+                if (valid_entry->first == "CLR" || valid_entry->first == "OUT" || valid_entry->first == "HALT"){
                     cout << "OK then..." <<endl;
                     RAM.push_back(valid_entry->second);
                     }
