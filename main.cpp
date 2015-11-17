@@ -23,20 +23,91 @@ vector<int> RAM;
 int main()
 {
     string filename, entry, user_added_opcode;
+
     char more_instruct_response;
     int new_operand;
 
     filename = filename_prompt();
-    ifstream myfile(filename.c_str());
 
     create_translation();
 
+    while (true)
+    {
+    ifstream myfile(filename.c_str());
+    if (myfile.is_open()){
+        cout << "File is open";
+        do {
+            (myfile >> entry && !myfile.eof());//{
+            valid_entry = translation.find(entry);
+            if (valid_entry == translation.end()){
+                istringstream(entry) >> result;
+                RAM.push_back(result);
+                }
+            else
+                RAM.push_back(valid_entry->second);
+        } while (entry != "HALT");
+        cout << RAM.size() <<endl;
+        //cout <<endl;
 
-    while  (myfile.fail()){
-        //while (myfile.fail()){
-            cout << "Error in opening your file, try again." << endl;
-            filename = filename_prompt();
-            ifstream myfile(filename.c_str());
+        //for (int i=0; i<RAM.size(); i++){
+        //cout << RAM[i] <<endl;
+        //}
+
+        for(int i=0; i<RAM.size(); i++){
+            // Fetch cycle
+            opcode = RAM[PC];
+            execute_instructions(opcode);
+        }
+
+
+        more_instruct_response = additional_instructions();
+        if (more_instruct_response =='Y' || more_instruct_response =='y'){
+                display_menu();
+                do {
+                cin >> user_added_opcode;
+                valid_entry = translation.find(user_added_opcode);
+                if (valid_entry->first == "CLR" || valid_entry->first == "OUT"){ //valid_entry->first == "HALT"){
+                    cout << "OK then..." <<endl;
+                    RAM.push_back(valid_entry->second);
+                    }
+
+                else{
+                    //cout << "Nevermind  then..." << endl;
+                    cout << "Enter the operand: " <<endl;
+                    cin >> new_operand;
+                    RAM.push_back(new_operand);
+                    }
+                }while (user_added_opcode != "HALT");
+                //}
+
+        //for (int i=0; i<RAM.size(); i++){
+        //cout << RAM[i] <<endl;
+        //}
+        for(int i=0; i<RAM.size(); i++){
+            // FETCH CYCLE
+            opcode = RAM[PC];
+            execute_instructions(opcode);
+        }
+        }
+        else{
+            cout << "Exiting current program..." << endl;
+            cout << "Returning to main menu..." <<endl;     //GO BACK TO MAIN MENU!
+            exit (EXIT_SUCCESS);
+        }
+        }
+
+        //break;
+        //}
+
+
+
+    else
+        cout << "Error in opening your file, try again." << endl;
+        cin >> filename;
+    }
+
+    return 0;
+    /*
 
 
     if (myfile.is_open()){
@@ -70,7 +141,7 @@ int main()
                 do {
                 cin >> user_added_opcode;
                 valid_entry = translation.find(user_added_opcode);
-                {if (valid_entry->first == "CLR" || valid_entry->first == "OUT" /*|| valid_entry->first == "HALT"*/){
+                {if (valid_entry->first == "CLR" || valid_entry->first == "OUT"} /|| valid_entry->first == "HALT"){
                     cout << "OK then..." <<endl;
                     RAM.push_back(valid_entry->second);
                     }
@@ -102,7 +173,13 @@ int main()
 
     myfile.close();
     return 0;
+    */
 }
+
+
+
+
+
 
 
 string filename_prompt(){
