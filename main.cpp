@@ -63,6 +63,8 @@ int main()
         more_instruct_response = additional_instructions();
         //if (more_instruct_response =='Y' || more_instruct_response =='y'){
         while (more_instruct_response =='Y' || more_instruct_response =='y'){
+                if (RAM[(RAM.size())-1]==9)
+                    RAM.erase (RAM.begin()+(RAM.size())-1);
                 display_menu();
                 //do {
                 cin >> user_added_opcode;   //MAKE USER INPUT UPPER CASE!
